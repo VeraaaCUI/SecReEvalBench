@@ -3,6 +3,7 @@ The increasing deployment of large language models in security-sensitive domains
 
 ## Benchmark Overview
 - **Total Prompts**: 2240
+- **Malicious Levels**: Level 1-Level 4
 - **Security Domains**: Physical Security, Data Security, Application Security, Network Security, Endpoint Security, Identity and Access Security, Operational Security.
 - **Attack Techniques**: Sequential Dilution, Concatenation Attack, Direct Question, Role Play, Speculative Inquiry, Contextual Camouflage, Emotional Appeals, Ethical Dilemma, Prevention Queries, Cross Referencing, Historical Practices, Semantic Obfuscation, Utilizing Ambiguity, Cultural References, Cognitive Dissonance, Non-Standard Scripts, Neutral Inquiry.
 - **Questioning Sequence**: One-off attack, Successive attack, Successive reverse attack, Sequential descending attack, Sequential ascending attack, Alternative attack
