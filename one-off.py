@@ -17,7 +17,7 @@ for category in data['categories']:
 #            if direction['direction_name'] == "network_security":
 #            if direction['direction_name'] == "endpoint_security":
 #            if direction['direction_name'] == "identity_and_access_management":
-            if direction['direction_name'] == "operational_security":
+#            if direction['direction_name'] == "operational_security":
 
                 for scenario in direction['scenarios']:
                     for prompt in scenario['prompts']:
