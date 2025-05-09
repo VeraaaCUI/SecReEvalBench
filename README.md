@@ -11,5 +11,5 @@ The increasing deployment of large language models in security-sensitive domains
 
 ## Usage
 - The code provided can be used to test and evaluate your model.
-- To use the code, you need: Python, Ollama, and langchain_ollama.
+- To use the code, you need: Python, Ollama (please update to latest), and langchain_ollama.
 - Each code test one type of Questioning Sequence.
