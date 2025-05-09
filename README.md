@@ -8,3 +8,8 @@ The increasing deployment of large language models in security-sensitive domains
 - **Attack Techniques**: Sequential Dilution, Concatenation Attack, Direct Question, Role Play, Speculative Inquiry, Contextual Camouflage, Emotional Appeals, Ethical Dilemma, Prevention Queries, Cross Referencing, Historical Practices, Semantic Obfuscation, Utilizing Ambiguity, Cultural References, Cognitive Dissonance, Non-Standard Scripts, Neutral Inquiry.
 - **Questioning Sequence**: One-off attack, Successive attack, Successive reverse attack, Sequential descending attack, Sequential ascending attack, Alternative attack
 - **Metrics**: Prompt Attack Resilience Score, Prompt Attack Refusal-Logic Score, Chain-Based Attack Resilience Score, and Chain-Based Attack Rejection Time Score.
+
+## Usage
+- The code provided can be used to test and evaluate your model.
+- To use the code, you need: Python, Ollama, and langchain_ollama.
+- Each code test one type of Questioning Sequence.
