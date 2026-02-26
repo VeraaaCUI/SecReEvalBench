@@ -1,0 +1,104 @@
+Metadata-Version: 2.4
+Name: secreeval
+Version: 0.1.0
+Summary: SecReEvalBench reproduction: multi-turn security resilience evaluation + automatic scoring
+Author: SecReEvalBench reproduction
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.24
+Requires-Dist: pandas>=2.0
+Requires-Dist: tqdm>=4.66
+Requires-Dist: requests>=2.31
+Requires-Dist: pydantic>=2.6
+Requires-Dist: pyyaml>=6.0
+Provides-Extra: transformers
+Requires-Dist: torch>=2.1; extra == "transformers"
+Requires-Dist: transformers>=4.40; extra == "transformers"
+Requires-Dist: accelerate>=0.27; extra == "transformers"
+Requires-Dist: sentencepiece>=0.2.0; extra == "transformers"
+
+# SecReEvalBench (reproduction / refactor)
+
+This is a clean, modernized Python implementation of the evaluation workflow described in your paper draft.
+
+It supports:
+
+- 6 questioning sequences: **one-off**, **successive**, **successive-reverse**, **alternative**, **sequential-ascending**, **sequential-descending**.
+- 4 metrics: **PARS**, **PARLS**, **CARS**, **CARTS**.
+- Pluggable generation backends:
+  - **Ollama** (recommended for quick local runs)
+  - **Transformers** (HuggingFace, optional)
+- Pluggable judges:
+  - **Llama-Guard 3** (safety / maliciousness scoring; can be run via Ollama or Transformers)
+  - **distilroberta-base-rejection-v1** (refusal detection; Transformers)
+- A tunable conversation history policy for context-preserved sequences:
+  - keep **full history** (paper default)
+  - or keep only the **most recent N turns** (your requested feature)
+
+Dataset support:
+
+- Legacy: `SecEvalDatabase.JSON`
+- Level-annotated: `SecEvalDatabase-with_levels.JSON` where each prompt includes `"level": "1"|"2"|"3"|"4"`.
+  We map levels to prompt maliciousness **Ms** as:
+  - level 1 → 1.00
+  - level 2 → 0.66
+  - level 3 → 0.33
+  - level 4 → 0.00 (benign)
+
+> ⚠️ Responsible use: this project sends the benchmark prompts (some are intentionally adversarial) to LLMs.
+> Use only in controlled evaluation settings.
+
+## Quickstart
+
+### 1) Install
+
+```bash
+cd secreevalbench
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# minimal install (Ollama backend)
+pip install -e .
+
+# OR, if you want HuggingFace Transformers backends/judges
+pip install -e ".[transformers]"
+```
+
+### 2) Run (Ollama backend example)
+
+Make sure Ollama is running and you have pulled the models you want to test.
+
+```bash
+# example: evaluate Qwen (generation) + Llama-Guard3 (judge) on successive sequence
+secreeval run \
+  --dataset ./data/SecEvalDatabase-with_levels.JSON \
+  --provider ollama \
+  --model qwen3:8b \
+  --judge-provider ollama \
+  --judge-guard-model llama-guard3:1b \
+  --sequence successive \
+  --history-window 4 \
+  --out ./runs/qwen_successive_w4
+```
+
+### 3) Summarize
+
+```bash
+secreeval summarize --run-dir ./runs/qwen_successive_w4
+```
+
+## CLI reference (most useful switches)
+
+- `--sequence {one_off,successive,successive_reverse,alternative,sequential_ascending,sequential_descending}`
+- `--history-window N`:
+  - `-1` = keep full chat history (paper default)
+  - `0`  = no history (equivalent to always reset)
+  - `N>0` = keep last **N turns** (a “turn” = user+assistant pair)
+- `--store-text {true|false}`: whether to persist raw prompts/responses in output files
+
+Outputs are written into `--out`:
+
+- `turns.jsonl`: per-turn prompt/response + scores
+- `summary.json`: metric aggregates
+- `summary.csv`: a single-row CSV of the metrics
